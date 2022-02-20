@@ -1,11 +1,11 @@
 import csv
 import sys
+import datetime
 
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 
 TEST_SIZE = 0.4
-
 
 def main():
 
@@ -59,8 +59,55 @@ def load_data(filename):
     labels should be the corresponding list of labels, where each label
     is 1 if Revenue is true, and 0 otherwise.
     """
-    raise NotImplementedError
+    filename = "shopping.csv"
 
+
+    evidence = list()
+    labels = list()
+    with open(filename) as f:
+        reader = csv.DictReader(f)
+        for i, row in enumerate(reader):
+
+            # Evidence
+            Administrative = int(row["Administrative"])
+            Administrative_Duration = float(row["Administrative_Duration"])
+            Informational = int(row["Informational"])
+            Informational_Duration = float(row["Informational_Duration"])
+            ProductRelated = int(row["ProductRelated"])
+            ProductRelated_Duration = float(row["ProductRelated_Duration"])
+            BounceRates = float(row["BounceRates"])
+            ExitRates = float(row["ExitRates"])
+            PageValues = float(row["PageValues"])
+            SpecialDay = float(row["SpecialDay"])
+
+            datetime_object = datetime.datetime.strptime(row["Month"], "%b")
+            Month = datetime_object.month
+
+            OperatingSystems = int(row["OperatingSystems"])
+            Browser = int(row["Browser"])
+            Region = int(row["Region"])
+            TrafficType = int(row["TrafficType"])
+
+            if row["VisitorType"] == "Returning_Visitor":
+                VisitorType = 1
+            else:
+                VisitorType = 0
+                
+            if row["Weekend"] == "TRUE":
+                Weekend = 1
+            else:
+                Weekend = 0
+
+            evidence.append([Administrative, Administrative_Duration, Informational, Informational_Duration, ProductRelated, ProductRelated_Duration, BounceRates, ExitRates, PageValues, SpecialDay, Month,OperatingSystems, Browser, Region, TrafficType, VisitorType, Weekend])
+            
+            # Labels
+
+            Revenue = row["Revenue"] == "TRUE"
+            labels.append([Revenue])
+            
+    return tuple(evidence, labels)
+
+  
 
 def train_model(evidence, labels):
     """
