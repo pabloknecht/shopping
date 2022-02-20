@@ -81,7 +81,7 @@ def load_data(filename):
             SpecialDay = float(row["SpecialDay"])
 
             datetime_object = datetime.datetime.strptime(row["Month"], "%b")
-            Month = datetime_object.month
+            Month = datetime_object.month -1
 
             OperatingSystems = int(row["OperatingSystems"])
             Browser = int(row["Browser"])
