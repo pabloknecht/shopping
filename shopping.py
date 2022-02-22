@@ -80,7 +80,12 @@ def load_data(filename):
             PageValues = float(row["PageValues"])
             SpecialDay = float(row["SpecialDay"])
 
-            datetime_object = datetime.datetime.strptime(row["Month"], "%b")
+            if row["Month"] == "June":
+                tmp_month = "Jun"
+            else:
+                tmp_month = row["Month"]
+
+            datetime_object = datetime.datetime.strptime(tmp_month, "%b")
             Month = datetime_object.month -1
 
             OperatingSystems = int(row["OperatingSystems"])
@@ -105,7 +110,7 @@ def load_data(filename):
             Revenue = row["Revenue"] == "TRUE"
             labels.append([Revenue])
             
-    return tuple(evidence, labels)
+    return tuple((evidence, labels))
 
   
 
@@ -140,7 +145,7 @@ def evaluate(labels, predictions):
     # Sensitivity
     true_positives = 0
     true_positives_identified = 0
-    for i, label in enumerate(label):
+    for i, label in enumerate(labels):
         if label == 1:
             true_positives = true_positives + 1 # sum of all true positives
             if predictions[i] == 1:
@@ -151,7 +156,7 @@ def evaluate(labels, predictions):
     # Specificity
     true_negatives = 0
     true_negatives_identified = 0
-    for i, label in enumerate(label):
+    for i, label in enumerate(labels):
         if label == 0:
             true_negatives = true_negatives + 1 # sum of all true negatives
             if predictions[i] == 0:
