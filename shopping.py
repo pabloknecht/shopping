@@ -108,9 +108,9 @@ def load_data(filename):
             # Labels
 
             Revenue = row["Revenue"] == "TRUE"
-            labels.append([Revenue])
+            labels.append(Revenue)
             
-    return tuple((evidence, labels))
+    return evidence, labels
 
   
 
